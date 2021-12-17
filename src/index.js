@@ -2,10 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import counterReducer from './redux/reducers/reducers'
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import rootReducer from './redux/reducers/rootReducer'
+import {watchFetchUsers} from './redux/sagas'
 
-const store = createStore(counterReducer)
+const sagaMiddleware = createSagaMiddleware()
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
+sagaMiddleware.run(watchFetchUsers)
 
 ReactDOM.render(
   <Provider store={store}>
